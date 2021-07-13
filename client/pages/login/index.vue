@@ -1,8 +1,11 @@
 <template>
   <div class="have-background">
     <div class="container login-center">
+      <Notification />
       <div class="wrap-login">
-        <span class="login100-form-title p-b-49">
+        <span
+          class="login100-form-title p-b-49"
+        >
           Login
         </span>
         <form class="login-form" @submit.prevent="handleSubmit">
@@ -30,6 +33,7 @@ export default {
   components: {
     Notification
   },
+  layout: 'public',
   // head() {
   //   return {
   //     link: [
@@ -56,9 +60,29 @@ export default {
       }
     }
   },
+  head() {
+    return {
+      title: 'Login to User Manager',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Login to User Manager'
+        }
+      ],
+      link: [{
+        rel: 'canonical', href: `${process.env.baseURL}/login`
+      }]
+    }
+  },
   methods: {
     async handleSubmit() {
-      await this.$auth.loginWith('laravelJWT', { data: this.formLogin }).then().catch((err) => console.log(err.response.data))
+      await this.$auth.loginWith('laravelJWT', { data: this.formLogin }).then().catch(({ response: err }) => {
+        this.$store.dispatch('validation/setErrorSer', {
+          type: 'danger',
+          message: err.data.message
+        })
+      })
     }
   }
 }
@@ -69,6 +93,7 @@ export default {
     background-image: url("@/assets/images/bg-2.webp");
   }
 .login-center{
+  flex-direction: column;
   width: 100%;
   min-height: 100vh;
   display: -webkit-box;

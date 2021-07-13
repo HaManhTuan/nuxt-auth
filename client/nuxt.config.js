@@ -12,12 +12,22 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }
+    ],
+    script: [
+      {
+        src: 'https://code.jquery.com/jquery-3.5.1.min.js'
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js'
+      }
     ]
   },
   loading: { color: 'red' },
   router: {
     middleware: [
+      'auth',
       'clearValidationErrors'
     ]
   },
@@ -30,8 +40,8 @@ export default {
   plugins: [
     '@plugins/vuelidate.js',
     '@plugins/mixins/validation.js',
-    '@plugins/mixins/user.js',
-    '@plugins/axios.js'
+    '@plugins/axios.js',
+    '~/plugins/filter/index.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,6 +58,9 @@ export default {
   ],
   axios: {
     baseURL: 'http://localhost:8000/api'
+  },
+  env: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
   },
   auth: {
     strategies: {
@@ -67,7 +80,7 @@ export default {
         },
         token: {
           property: 'token',
-          maxAge: 60 * 60
+          maxAge: 2600 * 60
         },
         user: {
           property: 'data.user'

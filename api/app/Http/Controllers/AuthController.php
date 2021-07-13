@@ -40,4 +40,9 @@ class AuthController extends Controller
         auth()->logout();
         return response()->json([], Response::HTTP_OK);
     }
+
+    protected function setModel()
+    {
+        // TODO: Implement setModel() method.
+    }
 }
